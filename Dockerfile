@@ -58,3 +58,22 @@ EXPOSE 8000
 
 # Use ENTRYPOINT to specify the executable when the container starts.
 ENTRYPOINT ["uvicorn", "app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+
+FROM debian:latest
+
+RUN apt-get update && apt-get install -y rpcbind \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+    FROM python:3.10-slim
+
+    WORKDIR /app
+    
+    COPY . /app
+    
+    RUN pip install --no-cache-dir -r requirements.txt
+    
+    EXPOSE 8000
+    
+    CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    

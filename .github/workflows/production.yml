@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - 1-editing-docker-file
   pull_request:
     branches:
       - main

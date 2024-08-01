@@ -8,7 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.dependencies import get_email_service, get_settings
 from app.models.user_model import User
-from app.schemas.user_schemas import UserCreate, UserUpdate
+from app.schemas.user_schemas import RoleUpdate, UserCreate, UserUpdate
 from app.utils.nickname_gen import generate_nickname
 from app.utils.security import generate_verification_token, hash_password, verify_password
 from uuid import UUID
@@ -74,6 +74,7 @@ class UserService:
                 await email_service.send_verification_email(new_user)
 
             session.add(new_user)
+            print("here")
             await session.commit()
             return new_user
         except ValidationError as e:
@@ -101,6 +102,32 @@ class UserService:
         except Exception as e:  # Broad exception handling for debugging
             logger.error(f"Error during user update: {e}")
             return None
+
+
+    @classmethod
+    async def update_role(cls, session: AsyncSession, user_id: UUID, update_data: Dict[str, str]) -> Optional[User]:
+        try:
+
+            updated_user = await cls.get_by_id(session, user_id)
+            # print(updated_user)
+            update_data.update({'email': updated_user.email})
+            # validated_data = UserUpdate(**update_data).dict(exclude_unset=True)
+            validated_data = RoleUpdate(**update_data).model_dump(exclude_unset=True)
+            # print(validated_data)
+            query = update(User).where(User.id == user_id).values(**validated_data).execution_options(synchronize_session="fetch")
+            await cls._execute_query(session, query)
+            updated_user = await cls.get_by_id(session, user_id)
+            if updated_user:
+                session.refresh(updated_user)  # Explicitly refresh the updated user object
+                # logger.info(f"User {user_id} updated successfully.")
+                return updated_user
+            else:
+                logger.error(f"User {user_id} not found after update attempt.")
+            return None
+        except Exception as e:  # Broad exception handling for debugging
+            logger.error(f"Error during user update: {e}")
+            return None
+
 
     @classmethod
     async def delete(cls, session: AsyncSession, user_id: UUID) -> bool:

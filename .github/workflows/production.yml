@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - 1-editing-docker-file
   pull_request:
     branches:
       - main
@@ -83,4 +84,3 @@ jobs:
           exit-code: '1' # Fail the job if vulnerabilities are found
           ignore-unfixed: true
           severity: 'CRITICAL'
-          

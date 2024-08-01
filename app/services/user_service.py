@@ -96,21 +96,16 @@ class UserService:
     @classmethod
     async def update_role(cls, session: AsyncSession, user_id: UUID, update_data: Dict[str, str]) -> Optional[User]:
         try:
-
             updated_user = await cls.get_by_id(session, user_id)
-            # print(updated_user)
             print(updated_user)
             update_data.update({'email': updated_user.email})
-            # validated_data = UserUpdate(**update_data).dict(exclude_unset=True)
             validated_data = RoleUpdate(**update_data).model_dump(exclude_unset=True)
-            # print(validated_data)
             print(validated_data)
             query = update(User).where(User.id == user_id).values(**validated_data).execution_options(synchronize_session="fetch")
             await cls._execute_query(session, query)
             updated_user = await cls.get_by_id(session, user_id)
             if updated_user:
                 session.refresh(updated_user)  # Explicitly refresh the updated user object
-                # logger.info(f"User {user_id} updated successfully.")
                 logger.info(f"User Role Updated for {user_id} updated successfully.")
                 return updated_user
             else:
@@ -118,8 +113,8 @@ class UserService:
             return None
         except Exception as e:  # Broad exception handling for debugging
             logger.error(f"Error during user update: {e}")
-            return None
-        
+            return None        
+          
     @classmethod
     async def delete(cls, session: AsyncSession, user_id: UUID) -> bool:
         user = await cls.get_by_id(session, user_id)

@@ -54,10 +54,6 @@ class UserUpdate(UserBase):
             raise ValueError("At least one field must be provided for update")
         return values
 
-class RoleUpdate(UserBase):
-    email: Optional[EmailStr] = Field(None, example="john.doe@example.com")
-    role: Optional[str] = Field(None, example="AUTHENTICATED")
-
 class UserResponse(UserBase):
     id: uuid.UUID = Field(..., example=uuid.uuid4())
     email: EmailStr = Field(..., example="john.doe@example.com")

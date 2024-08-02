@@ -4,10 +4,10 @@ Welcome to my project! My mission is to enhance Role-Based Access Control (RBAC)
 
 ## Adding New Feature:  RBAC Enhancements
 ## 5 QA Issues
-1. [Adding Endping called /user-role]()
-2. [Logging the user role change event]()
-3. [Adding filters to the endpoint to handle correct inputs]()
-4. [Adding 10 test cases for user role change endpoint]()
+1. [Adding Endping called /user-role](https://github.com/vinaykath/finalassignment/issues/5)
+2. [Logging the user role change event](https://github.com/vinaykath/finalassignment/issues/3)
+3. [Adding filters to the endpoint to handle correct inputs](https://github.com/vinaykath/finalassignment/issues/9)
+4. [Adding 10 test cases for user role change endpoint](https://github.com/vinaykath/finalassignment/issues/11)
 5. [Dockerfile](https://github.com/vinaykath/finalassignment/pull/2)
 
 ## 10 New Test Cases

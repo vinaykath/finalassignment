@@ -255,6 +255,15 @@ async def update_user_role(user_id: UUID, user_update: UserUpdate, request: Requ
     - **role**: New role for the user.
     """
 
+       #get role value from user_update object and check if the value is equal to "ADMIN"
+    role = user_update.role 
+
+    if not role:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Role is required")
+
+    if role != "ADMIN" or role != "MANAGER" or role != "AUTHENTICATED" or role != "ANONYMOUS":
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid input of role type. Enter ADMIN, MANAGER, AUTHENTICATED, ANONYMOUS")
+
     user_data = user_update.model_dump(exclude_unset=True)
     updated_user = await UserService.update_role(db, user_id, user_data)
     if not updated_user:
